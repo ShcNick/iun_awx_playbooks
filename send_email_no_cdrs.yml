@@ -1,0 +1,5 @@
+- hosts: all
+  tasks:
+      - name: send message
+        shell: 
+          cmd:  echo "There are no calls for previous day" | mail -s "Ansible Results" bondar.aleks.v@gmail.com

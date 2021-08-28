@@ -1,0 +1,16 @@
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: check autoincrement
+      shell:
+        cmd: "mysql -uroot porta-billing -sse \"select count(*) from CDR_Accounts where bill_time between (NOW()- INTERVAL 1 DAY) and NOW();\""
+      register: tables_list
+
+    - name: check stdout
+      ansible.builtin.shell: echo "output is not empty"
+      failed_when: tables_list.stdout == ""
+      
+    - name: transfer data to pass down to the next Job template
+      set_stats:
+        data:
+          sql_result: "{{ tables_list.stdout }}"

@@ -1,0 +1,12 @@
+- hosts: all
+  tasks:
+    - name: Do nothing, just that ansible ran, and ping
+      ping:
+
+    - name: Debug tables_list
+      debug:
+        var: sql_result
+
+    - name: send email with variable
+      shell: 
+       cmd:  echo "{{ sql_result }} calls have been produced for the previous day" | mail -s "Ansible Results" bondar.aleks.v@gmail.com

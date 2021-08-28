@@ -1,0 +1,13 @@
+- name: universe
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: run command from variable
+      shell:
+        cmd: "{{ meta }}"
+      register: command_result
+
+    - name: transfer data to pass down to the next Job template
+      set_stats:
+        data:
+          output: "{{ command_result.stdout }}"

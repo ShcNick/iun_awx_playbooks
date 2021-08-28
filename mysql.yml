@@ -1,0 +1,12 @@
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: check autoincrement
+      shell:
+        cmd: mysql -uroot porta-billing -sse "select count(*) from CDR_Accounts where bill_time between (NOW()- INTERVAL 1 DAY) and NOW();"
+      register: tables_list
+      ignore_errors: yes
+    - name: find out mysql uptime
+      shell:
+        cmd: "date -d @$(echo $(($(date +'%s')-$(mysql -uroot -sse 'SHOW GLOBAL STATUS;' | grep Uptime | head -1 | awk '{print $2}')))) +'%F %T'"
+      register: mysql_up_since

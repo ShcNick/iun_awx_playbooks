@@ -1,0 +1,6 @@
+- hosts: all
+  tasks:
+
+    - name: send email from variables
+      shell: 
+       cmd:  printf "{{ output1 }} {{ email_text1 }} \n {{ email_text2 }} {{ output2 }}"  | mail -s "{{ email_subject }}" {{ email_recipient }}

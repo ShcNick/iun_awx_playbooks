@@ -1,0 +1,16 @@
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: check autoincrement
+      shell:
+        cmd: mysql -uroot porta-billing -sse "select * from Accounts where i_account=0;"
+      register: tables_list
+      
+    - name: transfer data to pass down to the next Job template
+      set_stats:
+        data:
+          sql_result: "{{ tables_list }}"
+
+    - name: check stdout
+      ansible.builtin.shell: echo "output not is empty"
+      failed_when: tables_list.stdout == ""
