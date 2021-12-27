@@ -1,4 +1,5 @@
-- name: run commands from variables
+- hosts: all
+  name: run commands from variables
   gather_facts: no
   vars:
     def_lvl: "lvl_def"
