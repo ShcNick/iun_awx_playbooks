@@ -1,4 +1,5 @@
-- name: compare output of previous commands with args
+- hosts: all
+  name: compare output of previous commands with args
   gather_facts: no
 
   vars:
