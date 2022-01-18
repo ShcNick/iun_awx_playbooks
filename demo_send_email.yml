@@ -4,7 +4,7 @@
     - name: define vars
       set_fact:
          email_text1: "{{ '' if email_text1 is not defined }}"
-         email_text2: "{{ '' if email_text2 is not defined }}"
+#         email_text2: "{{ '' if email_text2 is not defined }}"
 
     - name: send email1 from variables
       shell: 
