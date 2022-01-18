@@ -34,12 +34,16 @@
     - name: run command1
       shell:
          cmd: "{{ vars[cmd_prefix]['command1'] }}"
+         args:
+            executable: /bin/bash
       when: vars[cmd_1] is defined
       register: result1
       
     - name: run command2
       shell:
          cmd: "{{ vars[cmd_prefix]['command2'] }}"
+         args:
+            executable: /bin/bash
       when: vars[cmd_2] is defined
       register: result2
 
