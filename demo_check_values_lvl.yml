@@ -1,6 +1,6 @@
 - hosts: all
   name: compare output of previous commands with args
-  gather_facts: yes
+  gather_facts: no
 
   vars:
     def_lvl: "lvl_def"
