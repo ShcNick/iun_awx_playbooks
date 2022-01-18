@@ -16,8 +16,6 @@
     - name: show vars
       debug: var=email_text1,email_text2
 
-#         email_text2: "{{ '' if email_text2 is not defined }}"
-
     - name: send email1 from variables
       shell: 
          cmd:  printf "{{ email_text1 }}"  | mail -s "{{ email_subject }}" {{ email_recipient }}
@@ -27,7 +25,6 @@
       shell: 
         cmd:  printf "{{ email_text2 }}"  | mail -s "{{ email_subject }}" {{ email_recipient }}
       when: (email_text2 != "") and (email_recipient is defined)       
-
 
 
 ##       cmd:  printf "{{ output1 }} {{ email_text1 }} \n {{ email_text2 }} {{ output2 }}"  | mail -s "{{ email_subject }}" {{ email_recipient }}
