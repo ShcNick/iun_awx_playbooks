@@ -1,15 +1,20 @@
 - hosts: all
   tasks:
 
+    - name: define vars
+      set_fact:
+         email_text1: "" if {{ email_text1 }} is not defined
+         email_text2: "" if {{ email_text2 }} is not defined
+
     - name: send email1 from variables
       shell: 
          cmd:  printf "{{ email_text1 }}"  | mail -s "{{ email_subject }}" {{ email_recipient }}
-      when: (email_text1 is defined) and (email_recipient is defined)       
+      when: (email_text1 != "") and (email_recipient is defined)       
 
     - name: send email2 from variables
       shell: 
         cmd:  printf "{{ email_text2 }}"  | mail -s "{{ email_subject }}" {{ email_recipient }}
-      when: (email_text2 is defined) and (email_recipient is defined)       
+      when: (email_text2 != "") and (email_recipient is defined)       
 
 
 
