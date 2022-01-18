@@ -28,7 +28,7 @@
       debug: var="{{ out_prefix }}"
       
     - name: show vars
-      debug: var="{{ zzz_stat }}"
+      debug: var=zzz_stat
 
     - name: exit on absent lvl output
       fail: msg="XXX{{':'}} Input error{{':'}} outputs for '{{ out_prefix }}' are absent"
