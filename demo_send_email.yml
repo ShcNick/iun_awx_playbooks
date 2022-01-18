@@ -7,13 +7,14 @@
       set_fact:
          email_text1: ""
       when: email_text1 is not defined
-      debug: var=email_text1
 
     - name: define vars
       set_fact:
          email_text2: ""
       when: email_text2 is not defined
-      debug: var=email_text2
+
+    - name: show vars
+      debug: var=email_text1,email_text2
 
 #         email_text2: "{{ '' if email_text2 is not defined }}"
 
