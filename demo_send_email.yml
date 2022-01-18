@@ -3,4 +3,12 @@
 
     - name: send email from variables
       shell: 
-       cmd:  printf "{{ output1 }} {{ email_text1 }} \n {{ email_text2 }} {{ output2 }}"  | mail -s "{{ email_subject }}" {{ email_recipient }}
+         cmd:  printf "{{ email_text1 }}"  | mail -s "{{ email_subject }}" {{ email_recipient }}
+      when: (email_text1 is defined) and (email_recipient is defined)       
+#       cmd:  printf "{{ output1 }} {{ email_text1 }} \n {{ email_text2 }} {{ output2 }}"  | mail -s "{{ email_subject }}" {{ email_recipient }}
+
+
+    - name: send email from variables
+      shell: 
+        cmd:  printf "{{ email_text2 }}"  | mail -s "{{ email_subject }}" {{ email_recipient }}
+      when: (email_text2 is defined) and (email_recipient is defined)       
