@@ -12,6 +12,11 @@
       set_fact:
          email_text2: ""
       when: email_text2 is not defined
+      
+    - name: define vars
+      set_fact:
+         email_subject: ""
+      when: email_subject is not defined
 
     - name: show vars
       debug: var=email_text1,email_text2
