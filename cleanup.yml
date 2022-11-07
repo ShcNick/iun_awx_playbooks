@@ -1,0 +1,11 @@
+#  name: Cleanup staff
+ 
+    - name: remove SQL files
+      shell:
+         cmd: "rm -rf {{ temp_path }}/{{ item }}"
+         executable: /bin/bash
+#         warn: false
+      loop: "{{ SQLS }}"
+      when: SQLS is defined
+
+

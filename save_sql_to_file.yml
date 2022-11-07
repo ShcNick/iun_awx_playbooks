@@ -1,0 +1,31 @@
+#  name: Save text of SQL variables to files in predefined temp dir
+ 
+    - name: load constants if not defined
+      include_vars: constants.yml
+      when: not (const_loaded | default(False))
+
+    - name: find SQL vars
+      set_fact:
+        SQLS: "{{ vars | select('match', sql_mysql_re+'|'+sql_oracle_re+'|'+sql_all_re ) | list }}"
+
+    - name: print SQL vars
+      debug:
+        var: SQLS
+
+    - name: create dir
+      shell:
+         cmd: "mkdir -p  {{ temp_path }}"
+         executable: /bin/bash
+         warn: false
+
+    - name: SQL texts
+      debug:
+        msg: "{{ item }} == {{ vars[item] }}"
+      loop: "{{ SQLS }}"
+
+    - name: save SQL to files
+      copy:
+        content: "{{ vars[item] }}" 
+        dest: "{{ temp_path }}/{{ item }}"
+      loop: "{{ SQLS }}"
+

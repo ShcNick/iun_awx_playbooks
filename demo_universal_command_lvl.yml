@@ -5,8 +5,13 @@
     def_lvl: "lvl_def"
     cmd_1: "command1"
     cmd_2: "command2"
+  vars_files:
+    - constants.yml
 
   tasks:
+    - name: prepare sql files
+      include_tasks: save_sql_to_file.yml
+
     - name: define prefixed
       set_fact:
         cmd_1: "{{ cmd_prefix }}_command1"
@@ -76,3 +81,6 @@
 #           - "Res of Out1 - {{ out_1 }} = '{{ vars[out_1] }}'"
 #           - "Res of Out2 - {{ out_2 }} = '{{ vars[out_2] }}'"
 #      debug: msg="Res of Out1 - {{ out_1 }} = {{ vars[out_1] }},\n Res of Out2 - {{ out_2 }} = {{ vars[out_2] }}"
+
+    - name: delete temp files
+      include_tasks: cleanup.yml
