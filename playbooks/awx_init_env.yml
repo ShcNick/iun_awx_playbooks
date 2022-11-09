@@ -8,6 +8,13 @@
     - name: prepare sql files
       include_tasks: awx_save_sql_to_file.yml
 
+    - name: copy aux files
+      ansible.builtin.copy:
+        src: scripts/remote/run_sql.pl
+        dest: /home/porta-one/scripts/run_sql.pl
+        mode: preserve
+        backup: yes
+
 #    - name: show vars
 #      debug: var="{{ cmd_prefix }}"
 
