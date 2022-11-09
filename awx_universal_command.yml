@@ -1,0 +1,19 @@
+- name: run commands from variables
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: run command1
+      shell:
+        cmd: "{{ command1 }}"
+      register: result1
+      
+    - name: run command2
+      shell:
+        cmd: "{{ command2 }}"
+      register: result2
+
+    - name: transfer data to pass down to the next Job template
+      set_stats:
+        data:
+          output1: "{{ result1.stdout }}" 
+          output2: "{{ result2.stdout }}" 

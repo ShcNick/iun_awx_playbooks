@@ -1,0 +1,20 @@
+- hosts: all
+  tasks:
+
+    - name: define vars
+      set_fact:
+         email_failed_text: ""
+      when: email_failed_text is not defined
+      
+    - name: define vars
+      set_fact:
+         email_subject: ""
+      when: email_subject is not defined
+
+    - name: show vars
+      debug: var=email_failed_text,email_failed_text
+
+    - name: send email from variables
+      shell: 
+         cmd:  printf "{{ email_failed_text }}"  | mail -s "{{ email_subject }}" {{ email_recipient }}
+      when: (email_failed_text != "") and (email_recipient is defined)       

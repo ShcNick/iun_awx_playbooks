@@ -1,0 +1,7 @@
+#  name: set constants
+  temp_path: "/porta_var/tmp/awx"
+  sql_mysql_re: "^sql_.*\\.mysql$"
+  sql_oracle_re: "^sql_.*\\.oracle$"
+  sql_all_re: "^sql_.*\\.sql$"
+  const_loaded: 1
+

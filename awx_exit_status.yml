@@ -1,0 +1,9 @@
+- hosts: all     
+  gather_facts: false
+  tasks:
+
+    - name: set exit status
+      ansible.builtin.debug:
+         msg: "Exit_status = "
+      check_mode: yes
+      ignore_errors: yes

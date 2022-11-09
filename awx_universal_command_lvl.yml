@@ -1,0 +1,86 @@
+- hosts: all
+  name: run commands from variables
+  gather_facts: no
+  vars:
+    def_lvl: "lvl_def"
+    cmd_1: "command1"
+    cmd_2: "command2"
+  vars_files:
+    - awx_constants.yml
+
+  tasks:
+    - name: prepare sql files
+      include_tasks: awx_save_sql_to_file.yml
+
+    - name: define prefixed
+      set_fact:
+        cmd_1: "{{ cmd_prefix }}_command1"
+        cmd_2: "{{ cmd_prefix }}_command2"
+      when: cmd_prefix is defined
+
+    - name: define non-prefixed
+      set_fact:
+        cmd_prefix: "{{ def_lvl }}"
+      when: cmd_prefix is not defined
+
+    - name: define commands
+      set_fact:
+        "{{ cmd_prefix }}":
+            command1: "{{ vars[cmd_1] if vars[cmd_1] is defined else '' }}"
+            command2: "{{ vars[cmd_2] if vars[cmd_2] is defined else '' }}"
+
+    - name: show vars
+      debug: var="{{ cmd_prefix }}"
+
+    - name: exit on undef cmd
+      fail: msg="XXX{{':'}} Args error{{':'}} '{{ cmd_1 }}' is undefined"
+      when: vars[cmd_1] is not defined
+
+    - name: run command1
+      shell:
+         cmd: "set -e -o pipefail; {{ vars[cmd_prefix]['command1'] }}"
+         executable: /bin/bash
+      when: vars[cmd_1] is defined
+      register: result1
+      
+    - name: run command2
+      shell:
+         cmd: "set -e -o pipefail; {{ vars[cmd_prefix]['command2'] }}"
+         executable: /bin/bash
+      when: vars[cmd_2] is defined
+      register: result2
+
+    - name: out_xxx
+      set_fact:
+         xxx :
+           output1 : "{{ result1.stdout if result1.stdout is defined else '' }}"
+           output2 : "{{ result2.stdout if result2.stdout is defined else '' }}"
+
+    - name: transfer facts to pass down to the next Job template
+      set_fact:
+         "{{ cmd_prefix }}": "{{ vars[cmd_prefix] | combine(xxx) }}"
+
+### "with dict" can't be used due to BUG 38075
+#         "{{ cmd_prefix }}": "{{ vars[cmd_prefix] | combine({item.key : item.value}) }}"
+#      with_dict:
+#         - output1 : "{{ result1.stdout if result1.stdout is defined else '' }}"
+#         - output2 : "{{ result2.stdout if result2.stdout is defined else '' }}"
+
+
+    - name: transfer data to pass down to the next Job template
+      set_stats:
+        data:
+           "{{ cmd_prefix }}": "{{ vars[cmd_prefix] }}"
+#               output1 : "{{ result1.stdout if result1.stdout is defined else '' }}"
+#               output2 : "{{ result2.stdout if result2.stdout is defined else '' }}"
+        per_host: no  # <-- important
+
+    - name: show res
+      debug: var="{{ cmd_prefix }}"
+#         msg:
+#           - "Res of Out1 - {{ out_1 }} = '{{ vars[out_1] }}'"
+#           - "Res of Out2 - {{ out_2 }} = '{{ vars[out_2] }}'"
+#      debug: msg="Res of Out1 - {{ out_1 }} = {{ vars[out_1] }},\n Res of Out2 - {{ out_2 }} = {{ vars[out_2] }}"
+
+    - name: delete temp files
+      include_tasks: awx_cleanup.yml

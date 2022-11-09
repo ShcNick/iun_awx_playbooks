@@ -1,0 +1,4 @@
+- hosts: all
+  tasks:
+    - name: copy file to remote host
+      ansible.builtin.copy: src="{{ src_path }}" dest="{{ dest_path }}"
