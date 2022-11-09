@@ -1,0 +1,13 @@
+- hosts: all
+  name: initial steps for every WF
+  gather_facts: no
+  vars_files:
+    - awx_constants.yml
+
+  tasks:
+    - name: prepare sql files
+      include_tasks: awx_save_sql_to_file.yml
+
+#    - name: show vars
+#      debug: var="{{ cmd_prefix }}"
+

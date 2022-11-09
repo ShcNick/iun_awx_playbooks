@@ -1,4 +1,4 @@
-#  name: Cleanup staff
+#  name: Cleanup stuff
  
     - name: remove SQL files
       shell:
