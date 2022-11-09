@@ -4,7 +4,7 @@
 
   vars:
     def_lvl: "lvl_def"
-    cmd_1_fc: "failed_condition"
+    cmd_1_fc: "fail_condition"
     cmd_1_sc: "success_condition"
     wr: "x_"  # wrapper for non-null strings
 
@@ -54,7 +54,7 @@
     - name: exit on cmd_1 conditions
       block:
 #        - ansible.builtin.shell:
-#             cmd:  echo "XXX - condition for command_1 failed"
+#             cmd:  echo "XXX - condition for command failed"
         - fail: msg="XXX{{':'}} condition for command failed"
       when: >
          ((xxx.x_fc_1 != "") and (xxx.x_fc_1 == wr + vars[out_prefix].output1)) or
