@@ -3,16 +3,16 @@
   gather_facts: no
 
   vars:
-    def_lvl: "lvl_def"
-    cmd_1_fc: "fail_condition"
-    cmd_1_sc: "success_condition"
+    def_lvl: "lvl_none"
+    var_fc: "fail_condition"
+    var_sc: "success_condition"
     wr: "x_"  # wrapper for non-null strings
 
   tasks:
     - name: define prefixed
       set_fact:
-        cmd_1_fc: "{{ out_prefix }}_{{ cmd_1_fc }}"
-        cmd_1_sc: "{{ out_prefix }}_{{ cmd_1_sc }}"
+        var_fc: "{{ out_prefix }}_{{ var_fc }}"
+        var_sc: "{{ out_prefix }}_{{ var_sc }}"
       when: out_prefix is defined
 
     - name: define non-prefixed
@@ -20,7 +20,7 @@
         out_prefix: "{{ def_lvl }}"
       when: out_prefix is not defined
 
-    - name: show vars
+    - name: show levels vars
       debug: var="{{ out_prefix }}"
       
     - name: exit on absent lvl output
@@ -29,34 +29,34 @@
 
     - name: exit on absent lvl output
       fail: msg="XXX{{':'}} Input error{{':'}} outputs for '{{ out_prefix }}' are absent"
-      when:  vars[out_prefix].output1  is not defined
+      when: vars[out_prefix].cmd_output  is not defined
 
     - name: define args
       set_fact:
          xxx:    
-            x_fc_1: "{{ wr + vars[cmd_1_fc] if vars[cmd_1_fc] is defined else '' }}"
-            x_sc_1: "{{ wr + vars[cmd_1_sc] if vars[cmd_1_sc] is defined else '' }}"
+            x_fc: "{{ wr + vars[var_fc] if vars[var_fc] is defined else '' }}"
+            x_sc: "{{ wr + vars[var_sc] if vars[var_sc] is defined else '' }}"
 
     - name: combine list
       set_fact:
          "{{ out_prefix }}": "{{ vars[out_prefix] | combine(xxx) }}"
 
-    - name: show vars
+    - name: show updated lvl vars
       debug:
          var: hostvars[inventory_hostname][out_prefix]
 
     - name: exit on undef conditions
-      fail: msg="XXX{{':'}} Args error{{':'}} neither '{{ cmd_1_fc }}' nor '{{ cmd_1_sc }}' are defined"
+      fail: msg="XXX{{':'}} Args error{{':'}} neither '{{ var_fc }}' nor '{{ var_sc }}' are defined"
       when: 
-         - xxx.x_fc_1 == ""
-         - xxx.x_sc_1 == ""
+         - xxx.x_fc == ""
+         - xxx.x_sc == ""
 
-    - name: exit on cmd_1 conditions
+    - name: exit on failed conditions
       block:
 #        - ansible.builtin.shell:
 #             cmd:  echo "XXX - condition for command failed"
         - fail: msg="XXX{{':'}} condition for command failed"
       when: >
-         ((xxx.x_fc_1 != "") and (xxx.x_fc_1 == wr + vars[out_prefix].output1)) or
-         ((xxx.x_sc_1 != "") and (xxx.x_sc_1 != wr + vars[out_prefix].output1))
+         ((xxx.x_fc != "") and (xxx.x_fc == wr + vars[out_prefix].cmd_output)) or
+         ((xxx.x_sc != "") and (xxx.x_sc != wr + vars[out_prefix].cmd_output))
 
