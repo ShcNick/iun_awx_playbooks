@@ -11,7 +11,7 @@
     - name: show local dirs
       local_action: 
          module: shell
-         cmd: "ls -lR / 2>/dev/null || true"
+         cmd: "ls -lR /"
       ignore_errors: True
 
 # can use module "synchronize" in case non-exist dest dirs
