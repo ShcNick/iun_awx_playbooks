@@ -1,8 +1,14 @@
 #  name: Cleanup stuff
 
+    - name: load constants if not defined
+      include_vars: awx_constants.yml
+      when: not (const_loaded | default(False))
+
     - name: show vars
-      debug: var="{{ SQLS }}"
-      when: SQLS is defined
+      debug:
+         var: hostvars[inventory_hostname]
+#      debug: var="{{ SQLS }}"
+#      when: SQLS is defined
  
     - name: remove SQL files
       shell:
