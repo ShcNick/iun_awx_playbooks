@@ -1,4 +1,8 @@
 #  name: Cleanup stuff
+
+    - name: show vars
+      debug: var="{{ SQLS }}"
+      when: SQLS is defined
  
     - name: remove SQL files
       shell:

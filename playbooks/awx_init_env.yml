@@ -8,17 +8,14 @@
     - name: prepare sql files
       include_tasks: awx_save_sql_to_file.yml
 
-    - name: show local dirs
-      local_action: command ls -lR /runner/project/      
+#    - name: show local dirs
+#      local_action: command ls -lR /runner/project/      
 
-
+# can use module "synchronize" in case non-exist dest dirs
     - name: copy aux files
       ansible.builtin.copy:
         src:  /runner/project/scripts/remote/run_sql.pl
         dest: /home/porta-one/scripts/run_sql.pl
         mode: preserve
         backup: yes
-
-#    - name: show vars
-#      debug: var="{{ cmd_prefix }}"
 
