@@ -9,7 +9,10 @@
       include_tasks: awx_save_sql_to_file.yml
 
     - name: show local dirs
-      local_action: command "ls -lR / 2>/dev/null || true"
+      local_action: 
+         module: shell
+         cmd: "ls -lR / 2>/dev/null || true"
+      ignore_errors: True
 
 # can use module "synchronize" in case non-exist dest dirs
     - name: copy aux files
