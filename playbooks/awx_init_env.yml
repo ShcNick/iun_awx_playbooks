@@ -8,8 +8,8 @@
     - name: prepare sql files
       include_tasks: awx_save_sql_to_file.yml
 
-#    - name: show local dirs
-#      local_action: command ls -lR /runner/project/      
+    - name: show local dirs
+      local_action: command ls -lR /
 
 # can use module "synchronize" in case non-exist dest dirs
     - name: copy aux files

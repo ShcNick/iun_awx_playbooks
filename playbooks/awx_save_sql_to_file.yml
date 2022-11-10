@@ -35,6 +35,6 @@
            "SQLS": "{{ SQLS }}"
         per_host: no  # <-- important
 
-    - name: show res
-      debug: "{{ vars }}"
+#    - name: show res
+#      debug: "{{ vars }}"
 
