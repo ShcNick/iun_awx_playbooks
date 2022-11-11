@@ -57,7 +57,7 @@ sub _log {
 sub usage {
     my ($exit_code) = @_;
 
-    my $schema_list = $conf_db . ", " . join(", ", keys %_DB_DSN);
+    my $schema_list = join(", ", sort($conf_db, keys %_DB_DSN));
     my $help_message = <<"__USAGE__"
     This script exetutes SQL query for the defined DB schema
 
