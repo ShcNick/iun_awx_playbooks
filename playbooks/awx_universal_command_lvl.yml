@@ -10,7 +10,7 @@
     - name: detect using of pipefail
       set_fact:
         pipefail_cmd: "set -o pipefail; "
-      when: use_pipefail|defaul(0) == 1
+      when: use_pipefail|default(0) == 1
 
     - name: define prefixed
       set_fact:
