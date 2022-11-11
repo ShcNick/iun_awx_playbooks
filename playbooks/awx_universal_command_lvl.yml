@@ -4,8 +4,14 @@
   vars:
     def_lvl: "lvl_none"
     cmd_var: "command"
+    pipefail_cmd: ""
 
   tasks:
+    - name: detect using of pipefail
+      set_fact:
+        pipefail_cmd: "set -o pipefail; "
+      when: use_pipefail|defaul(0) == 1
+
     - name: define prefixed
       set_fact:
         cmd_var: "{{ cmd_prefix }}_command"
@@ -30,7 +36,7 @@
 
     - name: run command
       shell:
-         cmd: "set -e -o pipefail; {{ vars[cmd_prefix]['cmd_text'] }}"
+         cmd: "{{ pipefail_cmd }}{{ vars[cmd_prefix]['cmd_text'] }}"
          executable: /bin/bash
       when: vars[cmd_var] is defined
       register: cmd_result
