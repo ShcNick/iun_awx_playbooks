@@ -9,12 +9,12 @@
     
 
   tasks:
-    - name: detect usage of pipefail
+    - name: enable usage of pipefail
       set_fact:
         pipefail_cmd: "set -o pipefail; "
       when: use_pipefail|default(0) == 1
 
-    - name: detect STDERR checking
+    - name: skip STDERR checking
       set_fact:
         exit_on_stderr: false
       when: check_stderr|default(1) != 1
@@ -50,7 +50,7 @@
       register: cmd_result
 
     - name: fail task if sterr not empty
-      fail: msg="XXX{{':'}} STDERR is not empty. If it is expected, set 'check_stderr{{':'}}0' for IUN, or use redirect of stderr (like 2>/dev/null) "
+      fail: msg="XXX{{':'}} STDERR is not empty. If it is expected, set 'check_stderr{{':'}} 0' for IUN, or use redirect of stderr (like 2>/dev/null) "
       when: exit_on_stderr and cmd_result.stderr != ''
       
     - name: out_xxx
