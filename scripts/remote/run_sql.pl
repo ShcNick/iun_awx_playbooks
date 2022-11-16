@@ -115,7 +115,7 @@ sub _disconnect {
 
 sub _get_db_engine {
   my $res;
-  my $cmd='eval "$(' . $get_opt_cmd . ' -n PortaSwitch -o "DatabaseServer.database_engine" --var-name DBOPTS)"; echo "${DBOPTS["DatabaseServer.database_engine"]}"';
+  my $cmd='eval "$(' . $get_opt_cmd . ' -n PortaSwitch -o "DatabaseServer.database_engine" --var-name DBOPTS 2>/dev/null)"; echo "${DBOPTS["DatabaseServer.database_engine"]}"';
   _log("DEBUG", "cmd for DB engine:\n$cmd");
   my $xx = qx/$cmd/;
   chomp $xx;
@@ -146,7 +146,7 @@ sub _get_db_dsn {
   my $user = $dsn =~ s/_dsn/_user/r;
   my $pass = $dsn =~ s/_dsn/_password/r;
 
-  my $cmd1 = 'eval "$(' . $get_opt_cmd . ' -n PortaSwitch -o "' . $cl.$dsn . '" -o "' . $cl.$user . '" -o "' . $cl.$pass . '" --var-name DBOPTS )"';
+  my $cmd1 = 'eval "$(' . $get_opt_cmd . ' -n PortaSwitch -o "' . $cl.$dsn . '" -o "' . $cl.$user . '" -o "' . $cl.$pass . '" --var-name DBOPTS 2>/dev/null)"';
   my $cmd2 = 'echo -e "${DBOPTS["' . $cl.$dsn . '"]}\n${DBOPTS["' . $cl.$user . '"]}\n${DBOPTS["' . $cl.$pass .'"]}"';
   _log("DEBUG","cmd for DB access:\n$cmd1 ; $cmd2");
   my $cmd = $cmd1 . ";" . $cmd2;
